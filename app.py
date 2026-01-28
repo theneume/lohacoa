@@ -3,13 +3,13 @@ import json
 import os
 from datetime import datetime
 import random
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify
 from natal_calculator import calculate_natal_type_from_dob
 
-app = Flask(__name__, static_folder='static', static_url_path='/static')
+app = Flask(__name__)
 
 # Load configuration
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyC1DgG1w7dm8fbZZ_LlAwhxpMSdNTJJl1Y')
 
 # Load data files
 with open('deepsyke_core_rag.json', 'r') as f:
@@ -17,9 +17,6 @@ with open('deepsyke_core_rag.json', 'r') as f:
 
 with open('dating_coach_rag.json', 'r') as f:
     DATING_COACH = json.load(f)
-
-with open('gravitor_code_rag.json', 'r') as f:
-    GRAVITOR_CODE = json.load(f)
 
 # Load system prompt
 with open('ai_system_prompt.txt', 'r') as f:
@@ -88,39 +85,47 @@ def create_contextual_greeting(profile):
     goals = profile.get('goals', '').lower()
     challenges = profile.get('challenges', '').lower()
     
-    # Contextual greeting templates based on archetype - positive, welcoming format
+    # Contextual greeting templates based on archetype
     greetings = {
         'Mystic': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Mystic. This means you're someone who values depth, intuition, and soulful connection in relationships. Your ability to see beneath the surface and connect on a profound level is your greatest strength in dating. Let's explore how to use this gift to attract the kind of meaningful connection you're looking for.",
-            f"Welcome, {name}! Based on your profile, you're a Mystic—someone who brings emotional depth and spiritual awareness to relationships. This archetype is drawn to authentic, transformative connections rather than surface-level interactions. Your intuitive nature helps you understand people on a level most can't reach. Let's talk about how to channel this into creating the relationships you truly desire."
+            f"Hey {name}, good to meet you. I can see you're someone who values depth and real connection in dating. That's actually rare these days, and it's going to serve you well. Let's figure out how to get you the kind of relationships that match that energy.",
+            f"Hi {name}. You strike me as someone who doesn't want surface-level dating - you want something that actually means something. That's completely valid, and honestly, it's what makes for the best connections. Let's talk about how to make that happen for you.",
+            f"Hello {name}. I get the sense you're looking for something deeper than the usual dating scene offers. That takes patience and the right approach, but it's absolutely worth it. Let's work on getting you what you're actually looking for."
         ],
         'Maiden': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Maiden. This means you're authentic, warm-hearted, and naturally nurturing in relationships. Your genuine nature and emotional openness are incredibly attractive qualities that draw people to you. Let's explore how to protect this beautiful energy while attracting the right connections.",
-            f"Welcome, {name}! Based on your profile, you're a Maiden—someone who brings warmth, authenticity, and natural charm to dating. This archetype is known for being emotionally honest and creating safe spaces for genuine connection. Your ability to be yourself without pretense is magnetic. Let's discuss how to use this strength to attract quality partners."
+            f"Hey {name}! I love that you're being real about this - your authenticity is going to be your biggest strength in dating. Let's talk about how to navigate things in a way that honors who you are while still getting you the connection you want.",
+            f"Hi {name}. Your warmth and honesty come through, and those are exactly the qualities that create lasting attraction. Let's figure out how to show up in dating in a way that feels true to you.",
+            f"Hey there, {name}. I can tell you're someone who cares deeply and wants genuine connection. That's beautiful, and also something to protect. Let's talk about how to date in a way that honors your heart."
         ],
         'Queen': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Queen. This means you're sophisticated, discerning, and carry yourself with natural elegance. Your high standards and self-respect are attractive qualities that draw people who appreciate excellence. Let's explore how to maintain your standards while creating space for genuine connection.",
-            f"Welcome, {name}! Based on your profile, you're a Queen—someone who brings grace, refinement, and clear boundaries to relationships. This archetype knows her worth and won't settle for less than she deserves. Your ability to command respect while remaining open to love is powerful. Let's talk about attracting partners who match your caliber."
+            f"Hello {name}. I respect that you have standards and won't settle - that's exactly right. The right people will appreciate that about you. Let's talk about how to navigate dating in a way that maintains your standards while still being open to real connection.",
+            f"Hi {name}. You clearly know what you want, and I like that. High standards aren't intimidating when they're backed by self-respect. Let's discuss how to date in a way that matches the quality you bring to the table.",
+            f"Hey {name}. Your sophistication and discernment are clear, and those are qualities that attract the right people. Let's work on finding the kind of connections that actually meet your criteria."
         ],
         'Huntress': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Huntress. This means you're confident, independent, and know exactly what you want. Your directness and ambition are incredibly attractive qualities that create exciting relationship dynamics. Let's explore how to channel this powerful energy into creating the connections you desire.",
-            f"Welcome, {name}! Based on your profile, you're a Huntress—someone who brings strength, clarity, and purpose to dating. This archetype goes after what she wants with confidence and doesn't play games. Your ability to be direct while maintaining your feminine power is magnetic. Let's discuss how to use this to attract quality partners."
+            f"Hey {name}. I can see you're someone who knows what you want and goes after it - that's incredibly attractive. Let's talk about how to channel that energy into creating the kind of connection you're looking for.",
+            f"Hi {name}. Your strength and directness are refreshing, and honestly, that's what makes for exciting dating dynamics. Let's figure out how to leverage your natural power in dating.",
+            f"Hello {name}. You're clearly ambitious and driven, and that's magnetic. Let's talk about how to create space for genuine connection alongside all your goals."
         ],
         'Magician': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Magician. This means you're perceptive, transformative, and understand the deeper dynamics of attraction. Your ability to read people and situations gives you a unique advantage in dating. Let's explore how to use this insight to create the profound connections you're seeking.",
-            f"Welcome, {name}! Based on your profile, you're a Magician—someone who brings wisdom, intuition, and transformative energy to relationships. This archetype sees patterns others miss and understands the psychology of attraction. Your depth of understanding is a powerful tool. Let's talk about channeling this into meaningful connections."
+            f"Hey {name}. I can tell you're someone who sees beneath the surface and wants real transformation in your relationships. That depth is going to serve you well. Let's talk about how to develop the kind of emotional intelligence that creates real attraction.",
+            f"Hi {name}. Your intuition and perceptiveness are clear, and those are qualities that make for profound connections. Let's work on understanding people on the level you're looking for.",
+            f"Hey {name}. You seem like someone who wants to understand the deeper dynamics of attraction and connection. That's exactly the right approach - let's dive into that."
         ],
         'Knight': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Knight. This means you're romantic, protective, and value honor in relationships. Your desire to be a provider and protector is an attractive quality when expressed with respect and emotional awareness. Let's explore how to channel this chivalrous energy into creating healthy, passionate connections.",
-            f"Welcome, {name}! Based on your profile, you're a Knight—someone who brings romance, loyalty, and a protective nature to dating. This archetype values commitment and wants to be the hero in his partner's story. Your romantic idealism, when balanced with emotional maturity, is incredibly appealing. Let's discuss how to pursue love in a way that honors both you and your future partner."
+            f"Hey {name}. Your romantic nature and desire to be a protector are clear - those are genuinely attractive qualities when expressed the right way. Let's talk about how to channel that energy into healthy, respectful pursuit.",
+            f"Hi {name}. I can see you want to be the one who can provide and protect, which is admirable. The key is doing it in a way that shows genuine care without being controlling. Let's work on that balance.",
+            f"Hello {name}. Your chivalrous energy is refreshing, and when it's combined with respect, it's incredibly attractive. Let's talk about how to show up in dating in a way that honors both your nature and modern dynamics."
         ],
         'Warrior': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the Warrior. This means you're confident, accomplished, and approach dating with the same excellence you bring to other areas of life. Your drive and ambition are attractive qualities that draw quality partners. Let's explore how to balance your competitive edge with emotional depth to create powerful connections.",
-            f"Welcome, {name}! Based on your profile, you're a Warrior—someone who brings strength, achievement, and determination to relationships. This archetype thrives on challenge and values excellence in all things, including love. Your confidence and success are magnetic. Let's talk about channeling this energy into creating the passionate, equal partnership you deserve."
+            f"Hey {name}. Your confidence and ambition are clear, and those are qualities that create real attraction. Let's talk about how to channel that energy into pursuing the connections you want while also developing emotional depth.",
+            f"Hi {name}. You're clearly someone who thrives on challenge and achievement - that energy is magnetic in dating when it's balanced with genuine connection. Let's work on that balance.",
+            f"Hello {name}. Your excellence and drive are impressive, and those are qualities that attract quality people. Let's talk about how to pursue dating with the same effectiveness you bring to other areas of life."
         ],
         'King': [
-            f"Hi {name}, welcome to Loha! I've determined from your profile that you embody the archetype of the King. This means you're a natural leader with vision, authority, and the ability to command respect. Your decisiveness and confidence are powerful attractive qualities. Let's explore how to lead in relationships while creating space for genuine emotional intimacy and partnership.",
-            f"Welcome, {name}! Based on your profile, you're a King—someone who brings leadership, wisdom, and authority to dating. This archetype knows what he wants and has the confidence to pursue it. Your ability to take charge while remaining emotionally present is rare and valuable. Let's discuss how to build the kingdom of love you envision."
+            f"Hey {name}. Your natural leadership and decisiveness are clear - those are qualities that create respect and attraction. Let's talk about how to lead in dating in a way that also creates genuine emotional connection.",
+            f"Hi {name}. You're clearly someone who wants to be in control of your dating life, which is right. The key is balancing that command with authentic emotional availability. Let's work on that.",
+            f"Hello {name}. Your vision and authority are clear, and those are qualities that draw people to you. Let's discuss how to date in a way that matches your natural leadership while remaining emotionally connected."
         ]
     }
     
@@ -131,12 +136,12 @@ def create_contextual_greeting(profile):
     # Add contextual element based on goals/challenges if provided
     if goals:
         if 'relationship' in goals or 'partner' in goals or 'love' in goals:
-            greeting += f"\n\nI see you mentioned wanting {goals.strip()}. Perfect—let's work together on strategies to make that happen."
+            greeting += f" Since you mentioned wanting {goals.strip()}, we can definitely work on strategies to get you there."
     
     return greeting
 
 def build_dating_system_prompt(profile, conversation_history):
-    """Build the complete dating coach system prompt with varied content rotation"""
+    """Build the complete dating coach system prompt"""
     natal_type = profile['natal_type']
     gender = profile['gender']
     archetype, description, nicknames = get_archetype(natal_type, gender)
@@ -172,160 +177,43 @@ def build_dating_system_prompt(profile, conversation_history):
     user_info += f"\n# YOUR ARCHETYPE: {archetype.upper()}\n"
     user_info += f"{description}\n"
     
-    # ROTATE CONTENT BASED ON CONVERSATION LENGTH TO PREVENT REPETITION
-    message_count = len(conversation_history)
+    # Add archetype communication style if available
+    if 'archetype_communication_styles' in DATING_COACH:
+        comm_style = DATING_COACH['archetype_communication_styles'].get(archetype, {})
+        if comm_style:
+            user_info += f"\nCommunication Style:\n"
+            user_info += f"Approach: {comm_style.get('approach', '')}\n"
+            user_info += f"Language: {comm_style.get('language', '')}\n"
+            user_info += f"Dating Advice Focus: {comm_style.get('dating_advice_focus', '')}\n"
+            user_info += f"Texting Style: {comm_style.get('texting_style', '')}\n"
     
-    # Different content sections for different conversation stages
-    if message_count <= 3:
-        # Early conversation: Focus on archetype and communication
-        if 'archetype_communication_styles' in DATING_COACH:
-            comm_style = DATING_COACH['archetype_communication_styles'].get(archetype, {})
-            if comm_style:
-                user_info += f"\n# COMMUNICATION STYLE\n"
-                user_info += f"Approach: {comm_style.get('approach', '')}\n"
-                user_info += f"Language: {comm_style.get('language', '')}\n"
-                user_info += f"Dating Advice Focus: {comm_style.get('dating_advice_focus', '')}\n"
-                user_info += f"Texting Style: {comm_style.get('texting_style', '')}\n"
-        
-        # Add tone protocol
-        if 'tone_protocol' in DATING_COACH:
-            tone = DATING_COACH['tone_protocol']
-            if 'communication_rules' in tone:
-                user_info += f"\n# COMMUNICATION GUIDELINES\n"
-                user_info += f"Format: {tone['communication_rules'].get('format', '')}\n"
-                user_info += f"Pacing: {tone['communication_rules'].get('pacing', '')}\n"
-                user_info += f"Emotion: {tone['communication_rules'].get('emotion', '')}\n"
-                user_info += f"Humor: {tone['communication_rules'].get('humor', '')}\n"
+    # Add tone protocol (use new structure if available)
+    if 'tone_protocol' in DATING_COACH:
+        tone = DATING_COACH['tone_protocol']
+        if 'communication_rules' in tone:
+            user_info += f"\n# COMMUNICATION GUIDELINES\n"
+            user_info += f"Format: {tone['communication_rules'].get('format', '')}\n"
+            user_info += f"Pacing: {tone['communication_rules'].get('pacing', '')}\n"
+            user_info += f"Emotion: {tone['communication_rules'].get('emotion', '')}\n"
+            user_info += f"Humor: {tone['communication_rules'].get('humor', '')}\n"
+            user_info += f"Language: {tone['communication_rules'].get('language', '')}\n"
     
-    elif message_count <= 6:
-        # Mid conversation: Focus on chemistry and attraction
-        if 'chemistry_building' in DATING_COACH:
-            chem = DATING_COACH['chemistry_building']
-            user_info += f"\n# CHEMISTRY BUILDING PRINCIPLES\n"
-            for principle in chem.get('principles', [])[:4]:
-                user_info += f"- {principle}\n"
-        
-        if 'attraction_principles' in DATING_COACH:
-            attr = DATING_COACH['attraction_principles']
-            user_info += f"\n# ATTRACTION PRINCIPLES\n"
-            for principle in attr.get('principles', [])[:3]:
-                user_info += f"- {principle}\n"
+    # Add chemistry building principles if available
+    if 'chemistry_building' in DATING_COACH:
+        chem = DATING_COACH['chemistry_building']
+        user_info += f"\n# CHEMISTRY BUILDING PRINCIPLES\n"
+        for principle in chem.get('principles', [])[:3]:
+            user_info += f"- {principle}\n"
     
-    elif message_count <= 9:
-        # Later conversation: Focus on texting and communication strategies
-        if 'texting_strategies' in DATING_COACH:
-            texting = DATING_COACH['texting_strategies']
-            user_info += f"\n# TEXTING STRATEGIES\n"
-            for principle in texting.get('general_principles', [])[:4]:
-                user_info += f"- {principle}\n"
-            archetype_texting = texting.get('archetype_specific', {}).get(archetype, '')
-            if archetype_texting:
-                user_info += f"\nFor Your Archetype: {archetype_texting}\n"
-        
-        if 'conversation_starters' in DATING_COACH:
-            starters = DATING_COACH['conversation_starters']
-            user_info += f"\n# CONVERSATION STARTERS\n"
-            for starter in starters.get('archetype_specific', {}).get(archetype, [])[:3]:
-                user_info += f"- {starter}\n"
-    
-    else:
-        # Deep conversation: Rotate through advanced topics including Gravitor Code
-        topic_rotation = message_count % 6
-        
-        if topic_rotation == 0:
-            # Gravitor Code insights
-            if 'gravitor_types' in GRAVITOR_CODE:
-                gravitor_types = GRAVITOR_CODE['gravitor_types']
-                # Map archetype to Gravitor type
-                gravitor_type = None
-                if archetype in ['Mystic', 'Magician']:
-                    gravitor_type = gravitor_types.get('SS', {})
-                elif archetype in ['Maiden', 'Knight']:
-                    gravitor_type = gravitor_types.get('SD', {})
-                elif archetype in ['Queen', 'Warrior']:
-                    gravitor_type = gravitor_types.get('DS', {})
-                elif archetype in ['Huntress', 'King']:
-                    gravitor_type = gravitor_types.get('DD', {})
-                
-                if gravitor_type:
-                    user_info += f"\n# GRAVITOR CODE INSIGHTS\n"
-                    user_info += f"Type: {gravitor_type.get('name', '')}\n"
-                    user_info += f"Neurochemical Profile: {gravitor_type.get('neurochemical_profile', '')}\n"
-                    
-                    themes = gravitor_type.get('gravitor_themes', [])
-                    if themes:
-                        user_info += f"\nCore Themes:\n"
-                        for theme in themes[:5]:
-                            user_info += f"- {theme}\n"
-                    
-                    topics = gravitor_type.get('conversation_topics', [])
-                    if topics:
-                        user_info += f"\nConversation Topics:\n"
-                        for topic in topics[:5]:
-                            user_info += f"- {topic}\n"
-        
-        elif topic_rotation == 1:
-            # Gravitor Code power statements
-            if 'gravitor_types' in GRAVITOR_CODE:
-                gravitor_types = GRAVITOR_CODE['gravitor_types']
-                # Map archetype to Gravitor type
-                gravitor_type = None
-                if archetype in ['Mystic', 'Magician']:
-                    gravitor_type = gravitor_types.get('SS', {})
-                elif archetype in ['Maiden', 'Knight']:
-                    gravitor_type = gravitor_types.get('SD', {})
-                elif archetype in ['Queen', 'Warrior']:
-                    gravitor_type = gravitor_types.get('DS', {})
-                elif archetype in ['Huntress', 'King']:
-                    gravitor_type = gravitor_types.get('DD', {})
-                
-                if gravitor_type:
-                    power_statements = gravitor_type.get('power_statements', [])
-                    if power_statements:
-                        user_info += f"\n# POWER STATEMENTS & CONVERSATION FLOWS\n"
-                        for ps in power_statements[:3]:
-                            user_info += f"\nStatement: {ps.get('statement', '')}\n"
-                            user_info += f"Why It Works: {ps.get('why_it_works', '')}\n"
-                            user_info += f"Use these as inspiration for powerful, connecting statements.\n"
-        
-        elif topic_rotation == 2:
-            # NLP and seduction patterns
-            if 'nlp_techniques' in DATING_COACH:
-                nlp = DATING_COACH['nlp_techniques']
-                user_info += f"\n# ADVANCED COMMUNICATION TECHNIQUES\n"
-                for technique in nlp.get('techniques', [])[:3]:
-                    user_info += f"- {technique}\n"
-            
-            if 'seductive_language_patterns' in DATING_COACH:
-                patterns = DATING_COACH['seductive_language_patterns']
-                user_info += f"\n# SEDUCTIVE LANGUAGE PATTERNS\n"
-                for pattern in patterns.get('archetype_specific', {}).get(archetype, [])[:2]:
-                    user_info += f"- {pattern}\n"
-        
-        elif topic_rotation == 3:
-            # Advanced seduction
-            if 'advanced_seduction_techniques' in DATING_COACH:
-                adv = DATING_COACH['advanced_seduction_techniques']
-                user_info += f"\n# ADVANCED SEDUCTION TECHNIQUES\n"
-                for technique in adv.get('techniques', [])[:3]:
-                    user_info += f"- {technique}\n"
-        
-        elif topic_rotation == 4:
-            # Gender-specific dating advice
-            if 'dating_advice_by_gender' in DATING_COACH:
-                gender_advice = DATING_COACH['dating_advice_by_gender']
-                user_info += f"\n# DATING ADVICE FOR {gender.upper()}\n"
-                advice_list = gender_advice.get(gender, [])
-                for advice in advice_list[:4]:
-                    user_info += f"- {advice}\n"
-        
-        else:
-            # Cultural avatars and cultural context
-            if 'cultural_avatar_guidelines' in DATING_COACH:
-                cultural = DATING_COACH['cultural_avatar_guidelines']
-                user_info += f"\n# CULTURAL REFERENCES\n"
-                for guideline in cultural.get('guidelines', [])[:3]:
-                    user_info += f"- {guideline}\n"
+    # Add texting strategies if available
+    if 'texting_strategies' in DATING_COACH:
+        texting = DATING_COACH['texting_strategies']
+        user_info += f"\n# TEXTING STRATEGIES\n"
+        for principle in texting.get('general_principles', [])[:3]:
+            user_info += f"- {principle}\n"
+        archetype_texting = texting.get('archetype_specific', {}).get(archetype, '')
+        if archetype_texting:
+            user_info += f"\nFor Your Archetype: {archetype_texting}\n"
     
     # Build conversation history
     history_text = "\n# CONVERSATION HISTORY\n"
@@ -340,14 +228,6 @@ def build_dating_system_prompt(profile, conversation_history):
     
     # Combine all parts
     full_prompt = system_prompt + "\n\n" + user_info + "\n\n" + history_text + "\n\n# USER'S MESSAGE:\n{user_message}"
-    
-    # Add variety reminder at the end
-    full_prompt += "\n\n# IMPORTANT: BRING FRESH CONTENT\n"
-    full_prompt += "This is message " + str(message_count) + " in the conversation. "
-    full_prompt += "Do NOT repeat information you've already shared about their birth date, natal type, or archetype characteristics. "
-    full_prompt += "Move the conversation forward with NEW insights, different topics, and fresh perspectives. "
-    full_prompt += "Vary your responses between communication style, texting, attraction, chemistry building, seduction techniques, and relationship advice. "
-    full_prompt += "Keep it interesting - no repetitive loops!"
     
     return full_prompt
 
@@ -416,7 +296,7 @@ def call_gemini_api(system_prompt, user_message, max_retries=2):
     
     for attempt in range(max_retries + 1):
         try:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={GEMINI_API_KEY}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
             
             full_prompt = system_prompt.replace('{user_message}', user_message)
             
@@ -438,6 +318,10 @@ def call_gemini_api(system_prompt, user_message, max_retries=2):
             
             response = requests.post(url, json=data, timeout=45)
             
+            print(f"API Response Status: {response.status_code}")
+            if response.status_code != 200:
+                print(f"API Response Body: {response.text}")
+            
             if response.status_code == 200:
                 result = response.json()
                 if 'candidates' in result and len(result['candidates']) > 0:
@@ -450,6 +334,7 @@ def call_gemini_api(system_prompt, user_message, max_retries=2):
                 time.sleep(1)  # Wait before retry
             else:
                 print(f"API returned status {response.status_code}")
+                print(f"Final error response: {response.text}")
                 return "I'm having some technical difficulties right now. Your message was saved though - just try sending it again in a moment."
                 
         except requests.exceptions.Timeout:
@@ -475,23 +360,6 @@ def call_gemini_api(system_prompt, user_message, max_retries=2):
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/static/<path:filename>')
-def serve_static(filename):
-    return send_from_directory('static', filename)
-
-# Explicit routes for images
-@app.route('/static/lologo8.png')
-def serve_logo():
-    return send_from_directory('static', 'lologo8.png')
-
-@app.route('/static/lohafront1.png')
-def serve_hero():
-    return send_from_directory('static', 'lohafront1.png')
-
-@app.route('/static/archtokens.png')
-def serve_archetypes():
-    return send_from_directory('static', 'archtokens.png')
 
 @app.route('/api/health')
 def health():
@@ -589,6 +457,13 @@ def chat():
         
         # Add response to history
         session['history'].append({'role': 'assistant', 'content': response})
+        
+        # TRUNCATE HISTORY: Keep only last 12 messages to prevent context overflow
+        # This ensures we maintain conversation continuity without overwhelming the API
+        if len(session['history']) > 12:
+            # Keep the first greeting message and the most recent 11 messages
+            # This preserves the initial context while limiting token usage
+            session['history'] = [session['history'][0]] + session['history'][-11:]
         
         return jsonify({
             'success': True,

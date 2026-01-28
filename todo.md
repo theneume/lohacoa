@@ -1,47 +1,52 @@
-# Loha Dating Coach - All Fixes Complete
+# LOHA Dating Coach V2 Refinements
 
-## Tasks Completed:
-- [x] Fix images/logo loading issue (using CDN images)
-- [x] Update sign-up button link to https://loha.dating/user/sign-up
-- [x] Replace footer text with new copyright notice
-- [x] Add privacy policy disclaimer
-- [x] Fix gender dropdown text color (white text on white background)
-- [x] Limit gender options to Male and Female only
-- [x] Enhance header (larger logo, "Loha Dating Coach", elegant fonts)
-- [x] Update blurb to focus on Deepsyke AI (removed neurochemical references)
-- [x] Improve opening messages (positive, welcoming format)
-- [x] Create deployment package for Render
+## ✅ COMPLETED
+- [x] Create backup of current working version
 
-## Summary
+## 🔧 IN PROGRESS
 
-All appearance and content fixes are complete:
+## 📋 TODO
 
-### Images
-- ✅ Using reliable Unsplash CDN images
-- ✅ Logo and hero image load on all platforms
-- ✅ No static file issues
+### 1. UI/Appearance Refinements
+- [x] Reduce all pink colors
+- [x] Find alternative highlight color that works with royal blue
+- [x] Ensure color scheme is appealing to men as well
+- [x] Update CSS with new color palette
+- [x] Test visual harmony
 
-### Content
-- ✅ Compelling hero blurb about Deepsyke AI
-- ✅ Positive, welcoming opening messages
-- ✅ No negative language (e.g., "controlling")
-- ✅ Clear archetype introductions
+### 2. Archetype Neurochemistry Explanation
+- [x] Add neurochemical insights to archetype explanations
+- [x] Explain Knights: high serotonin, balanced dopamine
+- [x] Explain other archetypes' neurochemical profiles
+- [x] Provide context about desire, attraction, relationships
+- [x] Keep explanations light, not too technical
+- [x] Reference general neuroscience concepts (e.g., oxytocin for bonding)
+- [x] Update AI system prompt with neurochemical guidance
+- [x] Ensure NO mention of type labels (SS, SD, DS, DD)
+- [x] Balance between accessibility and depth
 
-### Appearance
-- ✅ Larger logo (120px)
-- ✅ "Loha Dating Coach" header
-- ✅ Elegant Playfair Display font
-- ✅ All styling polished
+### 3. RAG Enhancement
+- [x] Add neurochemical explanation section to dating_coach_rag.json
+- [x] Include neuroscience insights for attraction and bonding
+- [x] Add archetype-specific neurochemical profiles
+- [x] Include relationship neurochemistry context
+- [x] Add bonding chemicals explanation (oxytocin, dopamine, serotonin)
 
-### Functionality
-- ✅ Sign-up button correct
-- ✅ Footer updated
-- ✅ Privacy disclaimer added
-- ✅ Gender dropdown fixed
-- ✅ All forms working
+### 4. AI System Prompt Update
+- [x] Update archetype coaching sections with neurochemistry
+- [x] Add guidelines for when to mention neurochemistry
+- [x] Balance neurochemical insights with practical advice
+- [x] Keep language conversational and accessible
+- [x] Reference general neuroscience research appropriately
 
-## Test URL
-https://9028-d08e810f-1926-4be5-8122-2c3015e117e2.sandbox-service.public.prod.myninja.ai
+### 5. Testing & Validation
+- [x] Test color scheme updates
+- [x] Test neurochemical explanations in AI responses
+- [x] Verify no type labels mentioned
+- [x] Check balance of technical vs accessible language
+- [x] Test different archetypes for neurochemical insights
 
-## Deployment Package
-loha-dating-coach-deployment-ready.tar.gz - Ready for Render
+### 6. Deployment Package
+- [x] Create V2 zip file
+- [x] Update deployment documentation
+- [x] Test deployment package completeness
