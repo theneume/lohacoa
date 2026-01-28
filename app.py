@@ -4,11 +4,9 @@ import os
 from datetime import datetime
 import random
 from flask import Flask, render_template, request, jsonify, send_from_directory
-from flask_cors import CORS
 from natal_calculator import calculate_natal_type_from_dob
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
-CORS(app)  # Enable CORS for all routes
 
 # Load configuration
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
@@ -330,9 +328,8 @@ def build_dating_system_prompt(profile, conversation_history):
                     user_info += f"- {guideline}\n"
     
     # Build conversation history
-    # Use all available history (already truncated in chat function)
     history_text = "\n# CONVERSATION HISTORY\n"
-    for msg in conversation_history:
+    for msg in conversation_history[-10:]:
         role = "YOU" if msg['role'] == 'user' else "LOHA"
         history_text += f"{role}: {msg['content']}\n\n"
     
@@ -593,13 +590,6 @@ def chat():
         # Add response to history
         session['history'].append({'role': 'assistant', 'content': response})
         
-        # TRUNCATE HISTORY: Keep only last 12 messages to prevent context overflow
-        # This ensures we maintain conversation continuity without overwhelming the API
-        if len(session['history']) > 12:
-            # Keep the first greeting message and the most recent 11 messages
-            # This preserves the initial context while limiting token usage
-            session['history'] = [session['history'][0]] + session['history'][-11:]
-        
         return jsonify({
             'success': True,
             'message': response
@@ -619,7 +609,18 @@ def chat():
         }), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get('PORT', 9024))
     print(f"Starting LOHA Dating Coach V2 on port {port}")
     print("Natural, helpful, and authentically human!")
-    app.run(host="0.0.0.0", port=port)
+    try:
+        app.run(host='0.0.0.0', port=port, debug=False)
+    except Exception as e:
+        print(f"Error starting server: {e}")
+        # Try alternative port
+        for alt_port in [9021, 9022, 9023]:
+            try:
+                print(f"Trying alternative port {alt_port}")
+                app.run(host='0.0.0.0', port=alt_port, debug=False)
+                break
+            except:
+                continue
