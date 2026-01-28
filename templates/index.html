@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOHA - Love of Human Attraction</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Poppins:wght@400;500;600&display=swap');
-
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +12,7 @@
         }
 
         body {
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             color: #fff;
@@ -41,33 +39,28 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #ffd93d;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 3px solid #ffd93d;
         }
 
         .header-text h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 900;
+            font-size: 2.5rem;
+            font-weight: 800;
             margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
         }
 
         .header-text .tagline {
-            font-family: 'Playfair Display', serif;
             font-size: 1rem;
             font-weight: 400;
             opacity: 0.95;
-            letter-spacing: 0.3px;
         }
 
         .header-buttons {
@@ -324,17 +317,6 @@
             background: rgba(255,255,255,0.1);
         }
 
-        /* Fix dropdown text color */
-        select {
-            color: #000;
-            background: #fff;
-        }
-
-        select option {
-            color: #000;
-            background: #fff;
-        }
-
         textarea {
             resize: vertical;
             min-height: 120px;
@@ -494,53 +476,12 @@
             font-size: 0.9rem;
         }
 
-        footer .copyright {
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        footer .privacy-notice {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            padding: 20px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            max-width: 800px;
-            margin: 20px auto;
-            line-height: 1.5;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
                 text-align: center;
                 gap: 20px;
-                padding: 20px;
-            }
-
-            .header-left {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .logo {
-                width: 100px;
-                height: 100px;
-            }
-
-            .header-text h1 {
-                font-size: 2rem;
-            }
-
-            .header-buttons {
-                flex-direction: column;
-                width: 100%;
-                gap: 10px;
-            }
-
-            .header-btn {
-                width: 100%;
             }
 
             .hero-section {
@@ -590,35 +531,35 @@
     <div class="container">
         <header>
             <div class="header-left">
-                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=200&h=200&fit=crop&crop=face" alt="LOHA Logo" class="logo">
+                <img src="/static/lologo8.png" alt="LOHA Logo" class="logo">
                 <div class="header-text">
-                    <h1>Loha Dating Coach</h1>
+                    <h1>LOHA</h1>
                     <p class="tagline">Personalised Advice for Dating and Relationships</p>
                 </div>
             </div>
             <div class="header-buttons">
                 <a href="https://www.loha.dating" class="header-btn primary">Visit LOHA</a>
-                <a href="https://loha.dating/user/sign-up" class="header-btn secondary">Sign Up Free</a>
+                <a href="https://www.loha.dating" class="header-btn secondary">Sign Up Free</a>
             </div>
         </header>
 
         <div class="hero-section">
             <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&h=600&fit=crop" alt="Romantic couple">
+                <img src="/static/lohafront1.png" alt="Romantic couple">
             </div>
             <div class="hero-content">
                 <h2>Discover Your Dating Archetype</h2>
                 <h2 style="font-size: 1.8rem;">Transform Your Love Life</h2>
-                <p>Using advanced AI pattern recognition called Deepsyke, we analyze your unique dating personality to reveal your archetype, relationship signatures, and the exact strategies that will help you attract your ideal match—whether that's a soulmate, a passionate connection, or something perfectly in between.</p>
-                <p>Get personalized insights that go deeper than any dating advice you've tried before. Understand what makes you magnetic, and learn how to create the connections you actually want.</p>
+                <p>Based on 14 years of research into neurochemical types, LOHA provides personalized, science-based dating advice that actually works.</p>
+                <p>Understand your unique psychology, discover your archetype, and unlock the secrets to authentic connection and lasting attraction.</p>
             </div>
         </div>
 
         <div class="features">
             <div class="feature-card">
                 <div class="icon">🧠</div>
-                <h3>Deepsyke AI Analysis</h3>
-                <p>Advanced pattern recognition that reveals your dating personality, relationship signatures, and attraction patterns—giving you insights no human coach could match.</p>
+                <h3>Neurochemical Insights</h3>
+                <p>Deep understanding of your unique neurochemical type and how it affects your dating behavior and attraction patterns.</p>
             </div>
             <div class="feature-card">
                 <div class="icon">💎</div>
@@ -626,7 +567,7 @@
                 <p>From Mystic to King, each archetype has distinct characteristics, strengths, and dating superpowers.</p>
             </div>
             <div class="feature-card">
-                <div class="icon">🗣️</div>
+                <div class="icon">💬</div>
                 <h3>Personalized Coaching</h3>
                 <p>Get tailored advice that speaks directly to your archetype - no generic one-size-fits-all nonsense.</p>
             </div>
@@ -681,7 +622,7 @@
 
             <div class="archetypes-info">
                 <h3>Why Archetypes Matter</h3>
-                <p>Our archetype system uses Deepsyke AI to analyze your dating patterns and energy expression, helping you communicate better, attract the right matches, and create deeper, more meaningful connections.</p>
+                <p>Our archetype system combines your neurochemical type with your energy expression, helping you communicate better, attract the right matches, and create deeper, more meaningful connections.</p>
             </div>
         </div>
 
@@ -705,12 +646,14 @@
                         <option value="">Select gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
+                        <option value="non-binary">Non-binary</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>🎓 What are your dating and relationship goals?</label>
+                <label>🎯 What are your dating and relationship goals?</label>
                 <textarea id="goals" placeholder="Tell me what you're looking for - casual dating, serious relationship, marriage, or just having fun figuring it out..."></textarea>
             </div>
 
@@ -745,6 +688,8 @@
                                 <option value="">Select</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
+                                <option value="non-binary">Non-binary</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -769,6 +714,8 @@
                                 <option value="">Select</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
+                                <option value="non-binary">Non-binary</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -793,6 +740,8 @@
                                 <option value="">Select</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
+                                <option value="non-binary">Non-binary</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -817,6 +766,8 @@
                                 <option value="">Select</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
+                                <option value="non-binary">Non-binary</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -832,7 +783,7 @@
 
         <div id="chatSection" class="chat-section">
             <div class="chat-header">
-                <h2>🗣️ Let's Talk Dating</h2>
+                <h2>💬 Let's Talk Dating</h2>
                 <button class="header-btn secondary" onclick="resetChat()" style="margin: 0; padding: 10px 20px; font-size: 0.9rem;">New Chat</button>
             </div>
             <div id="chatContainer" class="chat-container">
@@ -850,14 +801,8 @@
         </div>
 
         <footer>
-            <div class="copyright">
-                <p>Loha Dating Coach and Deepsyke AI. Copyright. 2026. All rights reserved.</p>
-                <p>Affinity Zones, Deepsyke AI modelling is exclusively licensed and protected IP.</p>
-            </div>
-            <div class="privacy-notice">
-                <strong>Privacy & Disclaimer:</strong><br>
-                This is not a medical or professional diagnosis but a self-help tool used at the discretion of the user and we take no responsibility for the actions taken as a result of engaging with Deepsyke integrations. No personal data is stored or captured and is only valid for a single session or until user closes browser.
-            </div>
+            <p>💖 LOHA - Love of Human Attraction | Based on "Magnetic" by Leo Kendrick</p>
+            <p>Your witty dating coach, keeping it real since 2025</p>
         </footer>
     </div>
 
